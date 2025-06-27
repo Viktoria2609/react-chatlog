@@ -2,22 +2,25 @@ import './App.css';
 import ChatLog from './components/ChatLog';
 import chatMessages from './data/messages.json';
 import { useState } from 'react';
-
+import {
+  toggleLikedStatus,
+  calculateTotalLikeCount,
+  getParticipants,
+} from './Helper_functions/helper_message';
 const App = () => {
   const [messages, setMessages] = useState(chatMessages);
 
   const toggleLike = (id) => {
-    const updatedMessages = messages.map((msg) =>
-      msg.id === id ? { ...msg, liked: !msg.liked } : msg
-    );
+    const updatedMessages = toggleLikedStatus(messages, id);
     setMessages(updatedMessages);
   };
+  const countLikes = calculateTotalLikeCount(messages);
+  const chatHeader = getParticipants(messages);
 
-  const countLikes = messages.filter((msg) => msg.liked).length;
   return (
     <div id="App">
       <header>
-        <h1> Magic Messages </h1>
+        <h1> {chatHeader} </h1>
         <h2>{countLikes} 💖</h2>
       </header>
       <main>
